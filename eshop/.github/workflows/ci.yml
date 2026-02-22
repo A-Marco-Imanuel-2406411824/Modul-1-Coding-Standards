@@ -3,8 +3,6 @@ name: Continuous Integration (CI)
 ## Run CI jobs on all branches by default
 on:
   push:
-    branches:
-      - '**'
   pull_request:
 
 jobs:
@@ -21,6 +19,9 @@ jobs:
           distribution: "temurin"
           java-version: "21"
           cache: "gradle"
+
+      - name: Cache Gradle
+        uses: gradle/actions/setup-gradle@d9c87d481d55275bb5441eef3fe0e46805f9ef70
 
       - name: Run unit tests
         run: ./gradlew test
