@@ -1,6 +1,6 @@
 name: Continuous Integration (CI)
 on:
-  push:
+  push: [ ci-cd ]
   pull_request:
 
 jobs:
