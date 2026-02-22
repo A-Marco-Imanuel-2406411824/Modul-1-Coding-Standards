@@ -3,12 +3,14 @@ name: Continuous Integration (CI)
 ## Run CI jobs on all branches by default
 on:
   push:
+    branches:
+      - '**'
   pull_request:
 
 jobs:
   test:
-    name: Run tests
     runs-on: ubuntu-22.04
+
     steps:
       - name: Check out the Git repository
         uses: actions/checkout@v4
