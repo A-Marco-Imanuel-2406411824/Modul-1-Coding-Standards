@@ -22,7 +22,5 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      ## Note to self:
-      ## by default, the ./gradlew build command also runs the "test" task
       - name: Build & Test
         run: ./gradlew build
