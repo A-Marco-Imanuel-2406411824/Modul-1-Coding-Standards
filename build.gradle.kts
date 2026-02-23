@@ -87,6 +87,12 @@ tasks.test{
 
 tasks.jacocoTestReport{
     dependsOn(tasks.test)
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+    }
 }
 
 // Sonarqube
@@ -95,5 +101,6 @@ sonar {
         property("sonar.projectKey", "A-marco-imanuel-2406411824_Modul-1-Coding-Standards") // proj key
         property("sonar.organization", "a-marco-imanuel-2406411824") // org key
         property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
     }
 }

@@ -7,16 +7,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
   private final ProductRepository productRepository;
-
-  public ProductServiceImpl(ProductRepository productRepository) {
-    this.productRepository = productRepository;
-  }
 
   @Override
   public Product create(Product product) {
