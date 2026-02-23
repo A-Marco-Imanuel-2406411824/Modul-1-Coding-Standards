@@ -27,7 +27,7 @@ jobs:
 
       - name: SonarCloud Scan
         env:
-          SONAR_PROJECT_KEY: a-marco-imanuel-2406411824_Modul-1-Coding-Standards
+          SONAR_PROJECT_KEY: a-marco-imanuel-2406411824_eshop
           SONAR_ORGANIZATION: a-marco-imanuel-2406411824
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew sonar --info
