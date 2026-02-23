@@ -4,6 +4,14 @@ plugins {
     id("org.springframework.boot") version "4.0.2"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.sonarqube") version "7.2.2.6593"
+    id("com.diffplug.spotless") version "8.2.1"
+}
+
+spotless{
+    java {
+        googleJavaFormat()
+        target("**/*.java")
+    }
 }
 
 group = "id.ac.ui.cs.advprog"
@@ -84,7 +92,8 @@ tasks.jacocoTestReport{
 // Sonarqube
 sonar {
     properties {
-        property("sonar.projectKey", "a-marco-imanuel-2406411824")
-        property("sonar.host.url", "http://localhost:8080/")
+        property("sonar.projectKey", "A-marco-imanuel-2406411824_Modul-1-Coding-Standards") // proj key
+        property("sonar.organization", "a-marco-imanuel-2406411824") // org key
+        property("sonar.host.url", "https://sonarcloud.io")
     }
 }

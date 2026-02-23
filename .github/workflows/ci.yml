@@ -24,3 +24,11 @@ jobs:
 
       - name: Build & Test
         run: ./gradlew build
+
+      - name: Spotless lint
+        run: ./gradlew spotlessCheck clean test jacocoTestReport
+
+      - name: SonarCloud Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew sonar --info
