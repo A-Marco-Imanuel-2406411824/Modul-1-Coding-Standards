@@ -84,7 +84,8 @@ tasks.jacocoTestReport{
 // Sonarqube
 sonar {
     properties {
-        property("sonar.projectKey", "a-marco-imanuel-2406411824")
-        property("sonar.host.url", "http://localhost:8080/")
+        property("sonar.projectKey", "a-marco-imanuel-2406411824") // org key
+        property("sonar.organization", "a-marco-imanuel-2406411824") // org key
+        property("sonar.host.url", "https://sonarcloud.io")
     }
 }
