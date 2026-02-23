@@ -84,7 +84,7 @@ tasks.jacocoTestReport{
 // Sonarqube
 sonar {
     properties {
-        property("sonar.projectKey", "a-marco-imanuel-2406411824") // org key
+        property("sonar.projectKey", "a-marco-imanuel-2406411824_Modul-1-Coding-Standards") // proj key
         property("sonar.organization", "a-marco-imanuel-2406411824") // org key
         property("sonar.host.url", "https://sonarcloud.io")
     }
