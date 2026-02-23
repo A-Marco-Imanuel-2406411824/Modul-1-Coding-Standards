@@ -7,13 +7,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
-  @Autowired private ProductRepository productRepository;
+  private final ProductRepository productRepository;
+
+  public ProductServiceImpl(ProductRepository productRepository) {
+    this.productRepository = productRepository;
+  }
 
   @Override
   public Product create(Product product) {
