@@ -4,19 +4,17 @@ import id.ac.ui.cs.advprog.eshop.model.Product;
 import id.ac.ui.cs.advprog.eshop.service.ProductService;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/product")
 public class ProductController {
 
   private final ProductService service;
-
-  public ProductController(ProductService service) {
-    this.service = service;
-  }
 
   @GetMapping("/create")
   public String createProductPage(Model model) {
