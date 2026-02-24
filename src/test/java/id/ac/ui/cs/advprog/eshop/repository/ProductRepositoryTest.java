@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
 import java.util.Iterator;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -64,5 +65,95 @@ class ProductRepositoryTest {
     savedProduct = productIterator.next();
     assertEquals(product2.getProductId(), savedProduct.getProductId());
     assertFalse(productIterator.hasNext());
+  }
+
+  @Test
+  void findByIdReturnsProductWhenPresent() {
+    Product product = new Product();
+    product.setProductId("id1");
+    product.setProductName("Found");
+    product.setProductQuantity(10);
+    productRepository.create(product);
+
+    Optional<Product> result = productRepository.findById("id1");
+
+    assertTrue(result.isPresent());
+    assertEquals(product, result.get());
+  }
+
+  @Test
+  void findByIdReturnsEmptyWhenIdIsNullOrMissing() {
+    productRepository.create(new Product());
+
+    assertFalse(productRepository.findById(null).isPresent());
+    assertFalse(productRepository.findById("missing").isPresent());
+  }
+
+  @Test
+  void updateReturnsNullWhenInputInvalid() {
+    assertNull(productRepository.update(null));
+
+    Product noId = new Product();
+    assertNull(productRepository.update(noId));
+  }
+
+  @Test
+  void updateReturnsNullWhenProductNotFound() {
+    Product existing = new Product();
+    existing.setProductId("id1");
+    existing.setProductName("Old");
+    existing.setProductQuantity(1);
+    productRepository.create(existing);
+
+    Product unknown = new Product();
+    unknown.setProductId("id2");
+    unknown.setProductName("New");
+    unknown.setProductQuantity(2);
+
+    assertNull(productRepository.update(unknown));
+  }
+
+  @Test
+  void updateMutatesMatchingProduct() {
+    Product existing = new Product();
+    existing.setProductId("id1");
+    existing.setProductName("Old");
+    existing.setProductQuantity(1);
+    productRepository.create(existing);
+
+    Product updated = new Product();
+    updated.setProductId("id1");
+    updated.setProductName("New Name");
+    updated.setProductQuantity(5);
+
+    Product result = productRepository.update(updated);
+
+    assertNotNull(result);
+    assertEquals("New Name", result.getProductName());
+    assertEquals(5, result.getProductQuantity());
+    assertEquals(existing, result);
+  }
+
+  @Test
+  void deleteByIdHandlesNullAndMissingId() {
+    assertFalse(productRepository.deleteById(null));
+    assertFalse(productRepository.deleteById("missing"));
+  }
+
+  @Test
+  void deleteByIdRemovesOnlyMatchingProduct() {
+    Product first = new Product();
+    first.setProductId("id1");
+    Product second = new Product();
+    second.setProductId("id2");
+    productRepository.create(first);
+    productRepository.create(second);
+
+    assertTrue(productRepository.deleteById("id1"));
+
+    Iterator<Product> remaining = productRepository.findAll();
+    assertTrue(remaining.hasNext());
+    assertEquals("id2", remaining.next().getProductId());
+    assertFalse(remaining.hasNext());
   }
 }
