@@ -30,4 +30,15 @@ class ProductTest {
   void testGetProductQuantity() {
     assertEquals(100, this.product.getProductQuantity());
   }
+
+  @Test
+  void testSettersUpdateFields() {
+    product.setProductId("new-id");
+    product.setProductName("Updated Name");
+    product.setProductQuantity(-5);
+
+    assertEquals("new-id", product.getProductId());
+    assertEquals("Updated Name", product.getProductName());
+    assertEquals(-5, product.getProductQuantity());
+  }
 }
