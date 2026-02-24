@@ -21,4 +21,3 @@ class HomeControllerTest {
     assertEquals("Homepage", viewName);
   }
 }
-
