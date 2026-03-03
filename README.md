@@ -5,7 +5,7 @@ There are several clean code principles used in the codebase. First, i ensured i
 
 
 ## Reflection 2:
-1. After writing the unit test, i feel more assured about the quality of the code written.
+1. After writing the unit test, I feel more assured about the quality of the code written.
    It may not be perfect, but it is certainly producing the expected behaviour in all the case tested.
    Also, since a certain behaviour is always checked by the unit test, I can feel more confident in changing a method's implementation for improvements as the unit test can
    verify the same expected behaviour consistently regardless of how the method works; it only cares on how it acts.
@@ -46,3 +46,32 @@ There are several clean code principles used in the codebase. First, i ensured i
    the SonarQube scanner i added in the CI script as well as Spotless. The codebase is also automatically deployed
    to a koyeb PaaS server using a pull based approach. Combined, the features above already 
    is an implementation of CI/CD. 
+
+## Reflection 3
+1. Principles applied:
+- SRP: By making CarController and ProductController into two separate classes (Instead of it inheriting ProductController), CarController now doesn't inherit the unnecessary ProductController functionalities and instead only has its own, thus keeping the responsibilities of those two controllers separate and singular.
+- DIP: By making CarController composit an object of a CarService interface instead of its implementation: CarServiceImpl, the controller now relies on the abstraction instead of the direct implementation, which reduces coupling from the dependency side of things and enhances flexibility on the dependency's part.
+
+2. Advantages of applying SOLID:
+    By applying SOLID, my project becomes more flexible (due to less coupling between features),
+    more resilient, and be much easier to maintain; Applying SOLID means i actively apply
+    the strengths of OOP to my project.
+
+    Examples:
+- Single Responsibility Principle (SRP): Controllers only handle HTTP orchestration, while services encapsulate business logic; easier to test ProductService in isolation with Mockito.
+- Open/Closed Principle (OCP): Implement `DiscountPolicy` interface so new discount strategies are added via new classes without modifying existing checkout code.
+- Liskov Substitution Principle (LSP): `InMemoryProductRepository` and `JpaProductRepository` both implement `ProductRepository`, allowing seamless swapping in tests vs production.
+- Interface Segregation Principle (ISP): Split wide repository interfaces into focused ones (e.g., `ProductReadRepository`, `ProductWriteRepository`) so clients only depend on what they use.
+- Dependency Inversion Principle (DIP): Controllers depend on abstractions (`ProductService`, `OrderService`) injected by Spring, improving testability and reducing coupling to concrete implementations.
+
+3. Disadvantages of not applying SOLID:
+    By not applying solid, my porject could become inflexible, fragile, stagnant, and difficult to maintain.
+    OOP is a great paradigm, but it also has its vices which - if not considered carefully - could be a huge detriment
+    to the project.
+    
+    Examples:
+- Violating SRP: A `ProductController` that also validates entities and talks directly to the database becomes hard to change and unit test.
+- Violating OCP: Adding a new payment method forces edits across multiple classes, increasing regression risk.
+- Violating LSP: Substituting a specialized repository that throws `UnsupportedOperationException` breaks callers expecting the base contract.
+- Violating ISP: A monolithic `InventoryService` interface forces consumers to implement/handle unused methods, leading to fragile mocks in tests.
+- Violating DIP: Hard-coding `new EmailNotifier()` inside services blocks mocking and makes swapping providers (e.g., SMTP vs. REST) error-prone.
