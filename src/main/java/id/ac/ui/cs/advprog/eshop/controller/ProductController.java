@@ -1,7 +1,9 @@
 package id.ac.ui.cs.advprog.eshop.controller;
-
 import id.ac.ui.cs.advprog.eshop.model.Product;
+import id.ac.ui.cs.advprog.eshop.model.Car;
+import id.ac.ui.cs.advprog.eshop.service.CarServiceImpl;
 import id.ac.ui.cs.advprog.eshop.service.ProductService;
+
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -57,4 +59,59 @@ public class ProductController {
     service.deleteById(id);
     return "redirect:/product/list";
   }
+}
+
+// NOTE: constructor is made manually due to lombok requiredArgsConstructor on
+// parent class
+@Controller
+@RequestMapping("/product")
+class CarController extends ProductController{
+  private final CarServiceImpl carService;
+
+  public CarController(ProductService productService, CarServiceImpl carService){
+    super(productService);
+    this.carService = carService;
+  }
+
+  @GetMapping("/createCar")
+  public String createCarPage(Model model){
+    Car car = new Car();
+    model.addAttribute("car", car);
+    return "createCar";
+  }
+
+  @PostMapping("/createCar")
+  public String createCarPost(@ModelAttribute Car car, Model model){
+    carService.create(car);
+    return "redirect:listCar";
+  }
+
+  @GetMapping("/listCar")
+  public String carListPage(Model model){
+    List<Car> allCars = carService.findAll();
+    model.addAttribute("cars", allCars);
+    return "listCar";
+  }
+
+  @GetMapping("/editCar/{carId}")
+  public String editCarPage(@PathVariable String carId, Model model){
+    Car car = carService.findById(carId);
+    model.addAttribute("car", car);
+    return "editCar";
+  }
+
+  @PostMapping("/editCar")
+  public String editCarPost(@ModelAttribute Car car, Model model){
+    System.out.println(car.getCarId());
+    carService.update(car.getCarId(), car);
+    return "redirect:listCar";
+  }
+
+  @PostMapping("/deleteCar")
+  public String deleteCar(@RequestParam("carId") String carId){
+    carService.deleteCarById(carId);
+    return "redirect:listCar";
+  }
+
+
 }
