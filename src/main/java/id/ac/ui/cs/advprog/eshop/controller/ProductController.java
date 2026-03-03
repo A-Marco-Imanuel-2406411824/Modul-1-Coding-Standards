@@ -2,7 +2,7 @@ package id.ac.ui.cs.advprog.eshop.controller;
 
 import id.ac.ui.cs.advprog.eshop.model.Car;
 import id.ac.ui.cs.advprog.eshop.model.Product;
-import id.ac.ui.cs.advprog.eshop.service.CarServiceImpl;
+import id.ac.ui.cs.advprog.eshop.service.CarService;
 import id.ac.ui.cs.advprog.eshop.service.ProductService;
 import java.util.List;
 import java.util.Optional;
@@ -61,17 +61,11 @@ public class ProductController {
   }
 }
 
-// NOTE: constructor is made manually due to lombok requiredArgsConstructor on
-// parent class
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/car")
-class CarController extends ProductController {
-  private final CarServiceImpl carService;
-
-  public CarController(ProductService productService, CarServiceImpl carService) {
-    super(productService);
-    this.carService = carService;
-  }
+class CarController {
+  private final CarService carService;
 
   @GetMapping("/createCar")
   public String createCarPage(Model model) {
