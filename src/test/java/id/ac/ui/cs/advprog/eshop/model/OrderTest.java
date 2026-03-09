@@ -65,7 +65,7 @@ public class OrderTest {
         assertThrows(IllegalArgumentException.class, () -> {
             Order order = new Order("xxx", this.products,
                     1708560000L, "Safira Sudrajat", "MEOW");
-        })
+        });
     }
 
     @Test
