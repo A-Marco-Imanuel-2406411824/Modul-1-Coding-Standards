@@ -75,3 +75,7 @@ There are several clean code principles used in the codebase. First, i ensured i
 - Violating LSP: Substituting a specialized repository that throws `UnsupportedOperationException` breaks callers expecting the base contract.
 - Violating ISP: A monolithic `InventoryService` interface forces consumers to implement/handle unused methods, leading to fragile mocks in tests.
 - Violating DIP: Hard-coding `new EmailNotifier()` inside services blocks mocking and makes swapping providers (e.g., SMTP vs. REST) error-prone.
+
+## Reflection 4
+1. This TDD flow seems useful enough to me. I become more productive by following this workflow
+due to the reduction of bugs when i implement the new features. 
