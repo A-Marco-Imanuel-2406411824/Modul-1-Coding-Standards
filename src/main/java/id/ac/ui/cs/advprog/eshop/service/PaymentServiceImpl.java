@@ -13,13 +13,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
-  // Valued constants for voucher code sub feature
+  // Valued constants for payment by voucher code sub feature
   private static final String VOUCHER_CODE_METHOD = "Voucher Code";
   private static final String VOUCHER_CODE_KEY = "voucherCode";
   private static final String VOUCHER_PREFIX = "ESHOP";
   private static final int VOUCHER_LENGTH = 16;
   private static final int REQUIRED_DIGIT_COUNT = 8;
 
+  // Valued constants for payment by bank transfer sub feature
   private static final String BANK_TRANSFER_METHOD = "Bank Transfer";
   private static final String BANK_NAME_KEY = "bankName";
   private static final String REFERENCE_CODE_KEY = "referenceCode";
@@ -53,11 +54,7 @@ public class PaymentServiceImpl implements PaymentService {
   private Payment createPayment(Order order, String method, Map<String, String> paymentData) {
     PaymentStatus initialStatus = determineInitialStatus(method, paymentData);
     return new Payment(
-        UUID.randomUUID().toString(),
-        order,
-        method,
-        initialStatus.getValue(),
-        paymentData);
+        UUID.randomUUID().toString(), order, method, initialStatus.getValue(), paymentData);
   }
 
   private PaymentStatus determineInitialStatus(String method, Map<String, String> paymentData) {

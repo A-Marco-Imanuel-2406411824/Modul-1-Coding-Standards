@@ -43,4 +43,3 @@ public class PaymentRepository {
     return result;
   }
 }
-

@@ -14,4 +14,3 @@ public interface PaymentService {
 
   List<Payment> getAllPayments(String author);
 }
-

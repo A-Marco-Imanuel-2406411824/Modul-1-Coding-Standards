@@ -62,7 +62,9 @@ class PaymentServiceTest {
 
   @Test
   void testAddPaymentWithValidVoucherCodeSetsStatusToSuccess() {
-    doAnswer(invocation -> invocation.getArgument(0)).when(paymentRepository).save(any(Payment.class));
+    doAnswer(invocation -> invocation.getArgument(0))
+        .when(paymentRepository)
+        .save(any(Payment.class));
 
     Payment result = paymentService.addPayment(order, "Voucher Code", paymentData);
 
@@ -77,7 +79,9 @@ class PaymentServiceTest {
   void testAddPaymentWithVoucherCodeWrongLengthSetsStatusToRejected() {
     Map<String, String> invalidPaymentData = new HashMap<>();
     invalidPaymentData.put("voucherCode", "ESHOP1234ABC567");
-    doAnswer(invocation -> invocation.getArgument(0)).when(paymentRepository).save(any(Payment.class));
+    doAnswer(invocation -> invocation.getArgument(0))
+        .when(paymentRepository)
+        .save(any(Payment.class));
 
     Payment result = paymentService.addPayment(order, "Voucher Code", invalidPaymentData);
 
@@ -89,7 +93,9 @@ class PaymentServiceTest {
   void testAddPaymentWithVoucherCodeWrongPrefixSetsStatusToRejected() {
     Map<String, String> invalidPaymentData = new HashMap<>();
     invalidPaymentData.put("voucherCode", "TOKO1234ABC5678");
-    doAnswer(invocation -> invocation.getArgument(0)).when(paymentRepository).save(any(Payment.class));
+    doAnswer(invocation -> invocation.getArgument(0))
+        .when(paymentRepository)
+        .save(any(Payment.class));
 
     Payment result = paymentService.addPayment(order, "Voucher Code", invalidPaymentData);
 
@@ -101,7 +107,9 @@ class PaymentServiceTest {
   void testAddPaymentWithVoucherCodeWithoutEightDigitsSetsStatusToRejected() {
     Map<String, String> invalidPaymentData = new HashMap<>();
     invalidPaymentData.put("voucherCode", "ESHOPABCDABCEFGHI");
-    doAnswer(invocation -> invocation.getArgument(0)).when(paymentRepository).save(any(Payment.class));
+    doAnswer(invocation -> invocation.getArgument(0))
+        .when(paymentRepository)
+        .save(any(Payment.class));
 
     Payment result = paymentService.addPayment(order, "Voucher Code", invalidPaymentData);
 
@@ -112,7 +120,9 @@ class PaymentServiceTest {
   @Test
   void testAddPaymentWithMissingVoucherCodeSetsStatusToRejected() {
     Map<String, String> invalidPaymentData = new HashMap<>();
-    doAnswer(invocation -> invocation.getArgument(0)).when(paymentRepository).save(any(Payment.class));
+    doAnswer(invocation -> invocation.getArgument(0))
+        .when(paymentRepository)
+        .save(any(Payment.class));
 
     Payment result = paymentService.addPayment(order, "Voucher Code", invalidPaymentData);
 
@@ -125,7 +135,9 @@ class PaymentServiceTest {
     Map<String, String> bankTransferData = new HashMap<>();
     bankTransferData.put("bankName", "BCA");
     bankTransferData.put("referenceCode", "INV-001");
-    doAnswer(invocation -> invocation.getArgument(0)).when(paymentRepository).save(any(Payment.class));
+    doAnswer(invocation -> invocation.getArgument(0))
+        .when(paymentRepository)
+        .save(any(Payment.class));
 
     Payment result = paymentService.addPayment(order, "Bank Transfer", bankTransferData);
 
@@ -139,7 +151,9 @@ class PaymentServiceTest {
   void testAddPaymentWithMissingBankNameSetsStatusToRejected() {
     Map<String, String> bankTransferData = new HashMap<>();
     bankTransferData.put("referenceCode", "INV-001");
-    doAnswer(invocation -> invocation.getArgument(0)).when(paymentRepository).save(any(Payment.class));
+    doAnswer(invocation -> invocation.getArgument(0))
+        .when(paymentRepository)
+        .save(any(Payment.class));
 
     Payment result = paymentService.addPayment(order, "Bank Transfer", bankTransferData);
 
@@ -152,7 +166,9 @@ class PaymentServiceTest {
     Map<String, String> bankTransferData = new HashMap<>();
     bankTransferData.put("bankName", null);
     bankTransferData.put("referenceCode", "INV-001");
-    doAnswer(invocation -> invocation.getArgument(0)).when(paymentRepository).save(any(Payment.class));
+    doAnswer(invocation -> invocation.getArgument(0))
+        .when(paymentRepository)
+        .save(any(Payment.class));
 
     Payment result = paymentService.addPayment(order, "Bank Transfer", bankTransferData);
 
@@ -165,7 +181,9 @@ class PaymentServiceTest {
     Map<String, String> bankTransferData = new HashMap<>();
     bankTransferData.put("bankName", "");
     bankTransferData.put("referenceCode", "INV-001");
-    doAnswer(invocation -> invocation.getArgument(0)).when(paymentRepository).save(any(Payment.class));
+    doAnswer(invocation -> invocation.getArgument(0))
+        .when(paymentRepository)
+        .save(any(Payment.class));
 
     Payment result = paymentService.addPayment(order, "Bank Transfer", bankTransferData);
 
@@ -177,7 +195,9 @@ class PaymentServiceTest {
   void testAddPaymentWithMissingReferenceCodeSetsStatusToRejected() {
     Map<String, String> bankTransferData = new HashMap<>();
     bankTransferData.put("bankName", "BCA");
-    doAnswer(invocation -> invocation.getArgument(0)).when(paymentRepository).save(any(Payment.class));
+    doAnswer(invocation -> invocation.getArgument(0))
+        .when(paymentRepository)
+        .save(any(Payment.class));
 
     Payment result = paymentService.addPayment(order, "Bank Transfer", bankTransferData);
 
@@ -190,7 +210,9 @@ class PaymentServiceTest {
     Map<String, String> bankTransferData = new HashMap<>();
     bankTransferData.put("bankName", "BCA");
     bankTransferData.put("referenceCode", null);
-    doAnswer(invocation -> invocation.getArgument(0)).when(paymentRepository).save(any(Payment.class));
+    doAnswer(invocation -> invocation.getArgument(0))
+        .when(paymentRepository)
+        .save(any(Payment.class));
 
     Payment result = paymentService.addPayment(order, "Bank Transfer", bankTransferData);
 
@@ -203,7 +225,9 @@ class PaymentServiceTest {
     Map<String, String> bankTransferData = new HashMap<>();
     bankTransferData.put("bankName", "BCA");
     bankTransferData.put("referenceCode", "");
-    doAnswer(invocation -> invocation.getArgument(0)).when(paymentRepository).save(any(Payment.class));
+    doAnswer(invocation -> invocation.getArgument(0))
+        .when(paymentRepository)
+        .save(any(Payment.class));
 
     Payment result = paymentService.addPayment(order, "Bank Transfer", bankTransferData);
 
@@ -271,4 +295,3 @@ class PaymentServiceTest {
     verify(paymentRepository, times(1)).findAllByAuthor(order.getAuthor());
   }
 }
-

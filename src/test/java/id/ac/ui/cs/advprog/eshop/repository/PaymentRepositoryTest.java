@@ -42,8 +42,10 @@ class PaymentRepositoryTest {
 
     payments = new ArrayList<>();
     payments.add(new Payment("payment-1", firstOrder, "Voucher Code", "PENDING", firstPaymentData));
-    payments.add(new Payment("payment-2", secondOrder, "Voucher Code", "SUCCESS", secondPaymentData));
-    payments.add(new Payment("payment-3", thirdOrder, "Voucher Code", "REJECTED", thirdPaymentData));
+    payments.add(
+        new Payment("payment-2", secondOrder, "Voucher Code", "SUCCESS", secondPaymentData));
+    payments.add(
+        new Payment("payment-3", thirdOrder, "Voucher Code", "REJECTED", thirdPaymentData));
   }
 
   @Test
@@ -68,12 +70,13 @@ class PaymentRepositoryTest {
 
     Map<String, String> updatedPaymentData = new HashMap<>();
     updatedPaymentData.put("voucherCode", "DISKON75");
-    Payment updatedPayment = new Payment(
-        originalPayment.getId(),
-        originalPayment.getOrder(),
-        originalPayment.getMethod(),
-        "SUCCESS",
-        updatedPaymentData);
+    Payment updatedPayment =
+        new Payment(
+            originalPayment.getId(),
+            originalPayment.getOrder(),
+            originalPayment.getMethod(),
+            "SUCCESS",
+            updatedPaymentData);
 
     Payment result = paymentRepository.save(updatedPayment);
     Payment findResult = paymentRepository.findById(originalPayment.getId());
@@ -134,4 +137,3 @@ class PaymentRepositoryTest {
     assertTrue(paymentList.isEmpty());
   }
 }
-

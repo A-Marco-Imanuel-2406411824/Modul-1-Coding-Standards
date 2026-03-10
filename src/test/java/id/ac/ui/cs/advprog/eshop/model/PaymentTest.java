@@ -76,4 +76,3 @@ class PaymentTest {
     assertThrows(IllegalArgumentException.class, () -> payment.setStatus("MEOW"));
   }
 }
-
