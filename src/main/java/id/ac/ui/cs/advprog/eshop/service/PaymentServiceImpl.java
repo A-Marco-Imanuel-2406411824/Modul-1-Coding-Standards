@@ -29,9 +29,12 @@ public class PaymentServiceImpl implements PaymentService {
   @Override
   public Payment setStatus(Payment payment, String status) {
     payment.setStatus(status);
-    if (PaymentStatus.SUCCESS.getValue().equals(status)) {
+    boolean isSuccess = PaymentStatus.SUCCESS.getValue().equals(status);
+    boolean isRejected = PaymentStatus.REJECTED.getValue().equals(status);
+
+    if (isSuccess) {
       payment.getOrder().setStatus(OrderStatus.SUCCESS.getValue());
-    } else if (PaymentStatus.REJECTED.getValue().equals(status)) {
+    } else if (isRejected) {
       payment.getOrder().setStatus(OrderStatus.FAILED.getValue());
     }
     return paymentRepository.save(payment);
@@ -47,4 +50,3 @@ public class PaymentServiceImpl implements PaymentService {
     return paymentRepository.findAllByAuthor(author);
   }
 }
-
