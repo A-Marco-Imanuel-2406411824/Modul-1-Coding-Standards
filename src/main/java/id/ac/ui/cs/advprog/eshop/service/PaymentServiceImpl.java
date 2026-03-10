@@ -20,6 +20,10 @@ public class PaymentServiceImpl implements PaymentService {
   private static final int VOUCHER_LENGTH = 16;
   private static final int REQUIRED_DIGIT_COUNT = 8;
 
+  private static final String BANK_TRANSFER_METHOD = "Bank Transfer";
+  private static final String BANK_NAME_KEY = "bankName";
+  private static final String REFERENCE_CODE_KEY = "referenceCode";
+
   @Autowired private PaymentRepository paymentRepository;
 
   @Override
@@ -57,15 +61,23 @@ public class PaymentServiceImpl implements PaymentService {
   }
 
   private PaymentStatus determineInitialStatus(String method, Map<String, String> paymentData) {
-    if (!isVoucherCodeMethod(method)) {
-      return PaymentStatus.PENDING;
+    if (isVoucherCodeMethod(method)) {
+      return isValidVoucherCode(paymentData) ? PaymentStatus.SUCCESS : PaymentStatus.REJECTED;
     }
 
-    return isValidVoucherCode(paymentData) ? PaymentStatus.SUCCESS : PaymentStatus.REJECTED;
+    if (isBankTransferMethod(method)) {
+      return isValidBankTransfer(paymentData) ? PaymentStatus.PENDING : PaymentStatus.REJECTED;
+    }
+
+    return PaymentStatus.PENDING;
   }
 
   private boolean isVoucherCodeMethod(String method) {
     return VOUCHER_CODE_METHOD.equals(method);
+  }
+
+  private boolean isBankTransferMethod(String method) {
+    return BANK_TRANSFER_METHOD.equals(method);
   }
 
   private void updateOrderStatus(Order order, PaymentStatus paymentStatus) {
@@ -91,6 +103,20 @@ public class PaymentServiceImpl implements PaymentService {
     boolean hasRequiredDigits = countDigits(voucherCode) == REQUIRED_DIGIT_COUNT;
 
     return hasValidLength && hasValidPrefix && hasRequiredDigits;
+  }
+
+  private boolean isValidBankTransfer(Map<String, String> paymentData) {
+    if (paymentData == null) {
+      return false;
+    }
+
+    return hasNonEmptyValue(paymentData, BANK_NAME_KEY)
+        && hasNonEmptyValue(paymentData, REFERENCE_CODE_KEY);
+  }
+
+  private boolean hasNonEmptyValue(Map<String, String> paymentData, String key) {
+    String value = paymentData.get(key);
+    return value != null && !value.isEmpty();
   }
 
   private int countDigits(String value) {

@@ -79,3 +79,5 @@ There are several clean code principles used in the codebase. First, i ensured i
 ## Reflection 4
 1. This TDD flow seems useful enough to me. I become more productive by following this workflow
 due to the reduction of bugs when i implement the new features. 
+
+2. 
