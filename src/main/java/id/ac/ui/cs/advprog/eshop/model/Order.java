@@ -1,7 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.model;
-import id.ac.ui.cs.advprog.eshop.enums.OrderStatus;
 
-import java.util.Arrays;
+import id.ac.ui.cs.advprog.eshop.enums.OrderStatus;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,9 +20,9 @@ public class Order {
     this.author = author;
     this.status = OrderStatus.WAITING_PAYMENT.getValue();
 
-    if(products.isEmpty()){
+    if (products.isEmpty()) {
       throw new IllegalArgumentException();
-    } else{
+    } else {
       this.products = products;
     }
   }
@@ -33,7 +32,7 @@ public class Order {
     this.setStatus(status);
   }
 
-  public void setStatus(String status){
+  public void setStatus(String status) {
     if (OrderStatus.contains(status)) {
       this.status = status;
     } else {
