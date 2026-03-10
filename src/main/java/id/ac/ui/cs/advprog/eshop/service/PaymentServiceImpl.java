@@ -51,6 +51,7 @@ public class PaymentServiceImpl implements PaymentService {
     return paymentRepository.findAllByAuthor(author);
   }
 
+  // Private helpers
   private Payment createPayment(Order order, String method, Map<String, String> paymentData) {
     PaymentStatus initialStatus = determineInitialStatus(method, paymentData);
     return new Payment(
