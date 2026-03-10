@@ -22,4 +22,13 @@ public enum PaymentStatus {
     }
     return false;
   }
+
+  public static PaymentStatus fromString(String status) {
+    for (PaymentStatus paymentStatus : PaymentStatus.values()) {
+      if (paymentStatus.name().equals(status)) {
+        return paymentStatus;
+      }
+    }
+    throw new IllegalArgumentException();
+  }
 }

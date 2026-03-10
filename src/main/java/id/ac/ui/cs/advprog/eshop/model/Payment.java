@@ -9,7 +9,7 @@ public class Payment {
   private final String id;
   private final Order order;
   private final String method;
-  private String status;
+  private PaymentStatus status;
   private final Map<String, String> paymentData;
 
   public Payment(String id, Order order, String method, String status,
@@ -21,11 +21,11 @@ public class Payment {
     setStatus(status);
   }
 
+  public String getStatus() {
+    return status.getValue();
+  }
+
   public void setStatus(String status) {
-    if (PaymentStatus.contains(status)) {
-      this.status = status;
-    } else {
-      throw new IllegalArgumentException();
-    }
+    this.status = PaymentStatus.fromString(status);
   }
 }

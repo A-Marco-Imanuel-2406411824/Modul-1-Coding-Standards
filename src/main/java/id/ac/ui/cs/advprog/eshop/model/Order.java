@@ -2,23 +2,21 @@ package id.ac.ui.cs.advprog.eshop.model;
 
 import id.ac.ui.cs.advprog.eshop.enums.OrderStatus;
 import java.util.List;
-import lombok.Builder;
 import lombok.Getter;
 
-@Builder
 @Getter
 public class Order {
   String id;
   List<Product> products;
   Long orderTime;
   String author;
-  String status;
+  OrderStatus status;
 
   public Order(String id, List<Product> products, Long orderTime, String author) {
     this.id = id;
     this.orderTime = orderTime;
     this.author = author;
-    this.status = OrderStatus.WAITING_PAYMENT.getValue();
+    this.status = OrderStatus.WAITING_PAYMENT;
 
     if (products.isEmpty()) {
       throw new IllegalArgumentException();
@@ -32,11 +30,11 @@ public class Order {
     this.setStatus(status);
   }
 
+  public String getStatus() {
+    return status.getValue();
+  }
+
   public void setStatus(String status) {
-    if (OrderStatus.contains(status)) {
-      this.status = status;
-    } else {
-      throw new IllegalArgumentException();
-    }
+    this.status = OrderStatus.fromString(status);
   }
 }

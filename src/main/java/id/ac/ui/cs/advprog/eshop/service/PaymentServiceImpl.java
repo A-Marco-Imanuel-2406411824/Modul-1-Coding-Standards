@@ -29,8 +29,8 @@ public class PaymentServiceImpl implements PaymentService {
   @Override
   public Payment setStatus(Payment payment, String status) {
     payment.setStatus(status);
-    boolean isSuccess = PaymentStatus.SUCCESS.getValue().equals(status);
-    boolean isRejected = PaymentStatus.REJECTED.getValue().equals(status);
+    final boolean isSuccess = PaymentStatus.SUCCESS.getValue().equals(status);
+    final boolean isRejected = PaymentStatus.REJECTED.getValue().equals(status);
 
     if (isSuccess) {
       payment.getOrder().setStatus(OrderStatus.SUCCESS.getValue());

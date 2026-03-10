@@ -23,4 +23,13 @@ public enum OrderStatus {
     }
     return false;
   }
+
+  public static OrderStatus fromString(String status) {
+    for (OrderStatus orderStatus : OrderStatus.values()) {
+      if (orderStatus.name().equals(status)) {
+        return orderStatus;
+      }
+    }
+    throw new IllegalArgumentException();
+  }
 }
