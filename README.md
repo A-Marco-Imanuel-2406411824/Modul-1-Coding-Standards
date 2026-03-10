@@ -80,4 +80,8 @@ There are several clean code principles used in the codebase. First, i ensured i
 1. This TDD flow seems useful enough to me. I become more productive by following this workflow
 due to the reduction of bugs when i implement the new features. 
 
-2. 
+2. The tests mostly follow the F.I.R.S.T. principle because they are Fast, since they use unit-level logic with mocked repositories and in-memory objects instead of starting the full application.
+   They are also largely Independent because each test prepares its own data in @BeforeEach and does not rely on execution order or shared persisted state.
+   They are Repeatable and Self-validating because the assertions are deterministic and each test clearly passes or fails without manual inspection.
+   They are reasonably Timely as well, because we wrote the tests before implementing voucher-code and bank-transfer behavior, so the features were driven by failing tests first.
+   The only small weakness is that some service tests now bundle several business rules in one class, so while they still satisfy F.I.R.S.T. overall, they could be made even cleaner by separating voucher and bank-transfer scenarios into more focused test groups.
