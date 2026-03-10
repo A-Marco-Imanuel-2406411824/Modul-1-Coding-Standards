@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
+  // Valued constants for voucher code sub feature
   private static final String VOUCHER_CODE_METHOD = "Voucher Code";
   private static final String VOUCHER_CODE_KEY = "voucherCode";
   private static final String VOUCHER_PREFIX = "ESHOP";
@@ -23,27 +24,15 @@ public class PaymentServiceImpl implements PaymentService {
 
   @Override
   public Payment addPayment(Order order, String method, Map<String, String> paymentData) {
-    PaymentStatus initialStatus = resolveInitialStatus(method, paymentData);
-    Payment payment = new Payment(
-        UUID.randomUUID().toString(),
-        order,
-        method,
-        initialStatus.getValue(),
-        paymentData);
+    Payment payment = createPayment(order, method, paymentData);
     return paymentRepository.save(payment);
   }
 
   @Override
   public Payment setStatus(Payment payment, String status) {
-    payment.setStatus(status);
-    final boolean isSuccess = PaymentStatus.SUCCESS.getValue().equals(status);
-    final boolean isRejected = PaymentStatus.REJECTED.getValue().equals(status);
-
-    if (isSuccess) {
-      payment.getOrder().setStatus(OrderStatus.SUCCESS.getValue());
-    } else if (isRejected) {
-      payment.getOrder().setStatus(OrderStatus.FAILED.getValue());
-    }
+    PaymentStatus paymentStatus = PaymentStatus.fromString(status);
+    payment.setStatus(paymentStatus.getValue());
+    updateOrderStatus(payment.getOrder(), paymentStatus);
     return paymentRepository.save(payment);
   }
 
@@ -57,15 +46,34 @@ public class PaymentServiceImpl implements PaymentService {
     return paymentRepository.findAllByAuthor(author);
   }
 
-  private PaymentStatus resolveInitialStatus(String method, Map<String, String> paymentData) {
-    if (!VOUCHER_CODE_METHOD.equals(method)) {
+  private Payment createPayment(Order order, String method, Map<String, String> paymentData) {
+    PaymentStatus initialStatus = determineInitialStatus(method, paymentData);
+    return new Payment(
+        UUID.randomUUID().toString(),
+        order,
+        method,
+        initialStatus.getValue(),
+        paymentData);
+  }
+
+  private PaymentStatus determineInitialStatus(String method, Map<String, String> paymentData) {
+    if (!isVoucherCodeMethod(method)) {
       return PaymentStatus.PENDING;
     }
 
-    if (isValidVoucherCode(paymentData)) {
-      return PaymentStatus.SUCCESS;
+    return isValidVoucherCode(paymentData) ? PaymentStatus.SUCCESS : PaymentStatus.REJECTED;
+  }
+
+  private boolean isVoucherCodeMethod(String method) {
+    return VOUCHER_CODE_METHOD.equals(method);
+  }
+
+  private void updateOrderStatus(Order order, PaymentStatus paymentStatus) {
+    if (paymentStatus == PaymentStatus.SUCCESS) {
+      order.setStatus(OrderStatus.SUCCESS.getValue());
+    } else if (paymentStatus == PaymentStatus.REJECTED) {
+      order.setStatus(OrderStatus.FAILED.getValue());
     }
-    return PaymentStatus.REJECTED;
   }
 
   private boolean isValidVoucherCode(Map<String, String> paymentData) {
