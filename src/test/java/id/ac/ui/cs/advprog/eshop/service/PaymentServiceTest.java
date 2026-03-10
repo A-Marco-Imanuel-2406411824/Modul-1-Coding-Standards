@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -49,7 +50,7 @@ class PaymentServiceTest {
     order = new Order("order-1", products, 1708560000L, "Marco");
 
     paymentData = new HashMap<>();
-    paymentData.put("voucherCode", "DISKON50");
+    paymentData.put("voucherCode", "ESHOP1234ABC5678");
     paymentData.put("address", "Depok");
 
     payment = new Payment("payment-1", order, "Voucher Code", "PENDING", paymentData);
@@ -60,16 +61,76 @@ class PaymentServiceTest {
   }
 
   @Test
-  void testAddPayment() {
-    doReturn(payment).when(paymentRepository).save(any(Payment.class));
+  void testAddPaymentWithValidVoucherCodeSetsStatusToSuccess() {
+    doAnswer(invocation -> invocation.getArgument(0)).when(paymentRepository).save(any(Payment.class));
 
     Payment result = paymentService.addPayment(order, "Voucher Code", paymentData);
 
     verify(paymentRepository, times(1)).save(any(Payment.class));
     assertEquals(order, result.getOrder());
     assertEquals("Voucher Code", result.getMethod());
-    assertEquals("PENDING", result.getStatus());
+    assertEquals("SUCCESS", result.getStatus());
     assertEquals(paymentData, result.getPaymentData());
+  }
+
+  @Test
+  void testAddPaymentWithVoucherCodeWrongLengthSetsStatusToRejected() {
+    Map<String, String> invalidPaymentData = new HashMap<>();
+    invalidPaymentData.put("voucherCode", "ESHOP1234ABC567");
+    doAnswer(invocation -> invocation.getArgument(0)).when(paymentRepository).save(any(Payment.class));
+
+    Payment result = paymentService.addPayment(order, "Voucher Code", invalidPaymentData);
+
+    assertEquals("REJECTED", result.getStatus());
+    verify(paymentRepository, times(1)).save(any(Payment.class));
+  }
+
+  @Test
+  void testAddPaymentWithVoucherCodeWrongPrefixSetsStatusToRejected() {
+    Map<String, String> invalidPaymentData = new HashMap<>();
+    invalidPaymentData.put("voucherCode", "TOKO1234ABC5678");
+    doAnswer(invocation -> invocation.getArgument(0)).when(paymentRepository).save(any(Payment.class));
+
+    Payment result = paymentService.addPayment(order, "Voucher Code", invalidPaymentData);
+
+    assertEquals("REJECTED", result.getStatus());
+    verify(paymentRepository, times(1)).save(any(Payment.class));
+  }
+
+  @Test
+  void testAddPaymentWithVoucherCodeWithoutEightDigitsSetsStatusToRejected() {
+    Map<String, String> invalidPaymentData = new HashMap<>();
+    invalidPaymentData.put("voucherCode", "ESHOPABCDABCEFGHI");
+    doAnswer(invocation -> invocation.getArgument(0)).when(paymentRepository).save(any(Payment.class));
+
+    Payment result = paymentService.addPayment(order, "Voucher Code", invalidPaymentData);
+
+    assertEquals("REJECTED", result.getStatus());
+    verify(paymentRepository, times(1)).save(any(Payment.class));
+  }
+
+  @Test
+  void testAddPaymentWithMissingVoucherCodeSetsStatusToRejected() {
+    Map<String, String> invalidPaymentData = new HashMap<>();
+    doAnswer(invocation -> invocation.getArgument(0)).when(paymentRepository).save(any(Payment.class));
+
+    Payment result = paymentService.addPayment(order, "Voucher Code", invalidPaymentData);
+
+    assertEquals("REJECTED", result.getStatus());
+    verify(paymentRepository, times(1)).save(any(Payment.class));
+  }
+
+  @Test
+  void testAddPaymentWithNonVoucherMethodDefaultsToPending() {
+    Map<String, String> bankTransferData = new HashMap<>();
+    bankTransferData.put("bankName", "BCA");
+    bankTransferData.put("referenceCode", "INV-001");
+    doAnswer(invocation -> invocation.getArgument(0)).when(paymentRepository).save(any(Payment.class));
+
+    Payment result = paymentService.addPayment(order, "Bank Transfer", bankTransferData);
+
+    assertEquals("PENDING", result.getStatus());
+    verify(paymentRepository, times(1)).save(any(Payment.class));
   }
 
   @Test
